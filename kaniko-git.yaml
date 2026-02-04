@@ -12,6 +12,8 @@ spec:
       volumeMounts:
         - name: kaniko-secret
           mountPath: /kaniko/.docker
+        - name: kaniko-context
+          mountPath: /context
   restartPolicy: OnFailure
   volumes:
     - name: kaniko-secret
