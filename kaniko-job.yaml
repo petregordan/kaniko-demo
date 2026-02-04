@@ -1,20 +1,25 @@
----
-apiVersion: v1
-kind: Pod
+apiVersion: batch/v1
+kind: Job
 metadata:
-  name: kaniko
+  name: kaniko-build
 spec:
+  template:
+    metadata:
+      labels:
+        job-name: kaniko-build
+  spec:
+  serviceAccountName: kaniko
   initContainers:
     - name: git-clone
       image: alpine/git:latest
       command: ["sh", "-c"]
       args:
-        - git clone https://github.com/nanditechbytes/containerisation-kaniko-eks.git /kaniko-secret/containerisation-kaniko-eks
+        - git clone https://github.com/nanditechbytes/containerisation-kaniko-eks.git /workspace/containerisation-kaniko-eks
       volumeMounts:
-        - name: kaniko-secret
-          mountPath: /kaniko/.docker    
+        - name: workspace
+          mountPath: /workspace
   containers:
-  - name: kaniko
+    - name: kaniko
     image: gcr.io/kaniko-project/executor:debug
     imagePullPolicy: Always
     args: ["--context=git://github.com/petregordan/kaniko-demo",
