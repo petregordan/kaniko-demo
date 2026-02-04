@@ -11,8 +11,8 @@ spec:
       args:
         - git clone https://github.com/nanditechbytes/containerisation-kaniko-eks.git /workspace/containerisation-kaniko-eks
       volumeMounts:
-        - name: workspace
-          mountPath: /workspace
+        - name: kaniko-secret
+          mountPath: /kaniko/.docker
   containers:
   - name: kaniko
     image: gcr.io/kaniko-project/executor:debug
