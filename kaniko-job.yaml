@@ -8,30 +8,39 @@ spec:
       labels:
         job-name: kaniko-build
   spec:
-  serviceAccountName: kaniko
-  initContainers:
-    - name: git-clone
-      image: alpine/git:latest
-      command: ["sh", "-c"]
-      args:
-        - git clone https://github.com/nanditechbytes/containerisation-kaniko-eks.git /workspace/containerisation-kaniko-eks
-      volumeMounts:
-        - name: workspace
-          mountPath: /workspace
-  containers:
-    - name: kaniko
-    image: gcr.io/kaniko-project/executor:debug
-    imagePullPolicy: Always
-    args: ["--context=git://github.com/petregordan/kaniko-demo",
-           "--destination=petregordandockerhub/devops-toolkit:1.0.0"]
-    volumeMounts:
-      - name: kaniko-secret
-        mountPath: /kaniko/.docker
+    serviceAccountName: kaniko
+    initContainers:
+      - name: git-clone
+        image: alpine/git:latest
+        command: ["sh", "-c"]
+        args:
+          - git clone https://github.com/nanditechbytes/containerisation-kaniko-eks.git /workspace/containerisation-kaniko-eks
+        volumeMounts:
+          - name: workspace
+            mountPath: /workspace
+    containers:
+      - name: kaniko
+        image: gcr.io/kaniko-project/executor:debug
+        imagePullPolicy: Always
+        args: ["--context=dir:///workspace/containerisation-kaniko-eks",
+               "--dockerfile=/workspace/containerisation-kaniko-eks/Dockerfile",
+               "--destination=devops091/dotnet-app:v1",
+               "--cache=true"]
+        volumeMounts:
+          - name: workspace
+            mountPath: /workspace
+          - name: docker-config
+            mountPath: /kaniko/.docker
+            readonly: true
   restartPolicy: Never
   volumes:
-    - name: kaniko-secret
-      secret:
-        secretName: regcred
-        items:
-          - key: .dockerconfigjson
-            path: config.json
+    - name: workspace
+      emptydir: {}
+    - name: docker-config
+      projected:
+        sources:
+          - secret:
+              name: regcred
+              items:
+                - key: .dockerconfigjson
+                  path: config.json
