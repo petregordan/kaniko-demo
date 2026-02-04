@@ -32,15 +32,15 @@ spec:
           - name: docker-config
             mountPath: /kaniko/.docker
             readonly: true
-  restartPolicy: Never
-  volumes:
-    - name: workspace
-      emptydir: {}
-    - name: docker-config
-      projected:
-        sources:
-          - secret:
-              name: regcred
-              items:
-                - key: .dockerconfigjson
-                  path: config.json
+    restartPolicy: Never
+    volumes:
+      - name: workspace
+        emptydir: {}
+      - name: docker-config
+        projected:
+          sources:
+            - secret:
+                name: regcred
+                items:
+                  - key: .dockerconfigjson
+                    path: config.json
