@@ -23,4 +23,5 @@ spec:
           - key: .dockerconfigjson
             path: config.json
     - name: kaniko-context
-      hostPath: /tmp/kaniko_context
+      hostPath:
+        path: /tmp/kaniko_context
