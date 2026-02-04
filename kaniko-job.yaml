@@ -31,11 +31,10 @@ spec:
               mountPath: /workspace
             - name: docker-config
               mountPath: /kaniko/.docker
-              readonly: true
       restartPolicy: Never
       volumes:
         - name: workspace
-          emptydir: {}
+          emptyDir: {}
         - name: docker-config
           projected:
             sources:
