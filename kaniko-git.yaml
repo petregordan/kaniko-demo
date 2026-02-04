@@ -8,7 +8,7 @@ spec:
       image: gcr.io/kaniko-project/executor:debug
       imagePullPolicy: Always
       args: ["--context=git://github.com/petregordan/kaniko-demo",
-             "--destination=petregordandockerhub/devops-toolkit:1.0.0"]
+              "--destination=petregordandockerhub/devops-toolkit:1.0.0"]
       volumeMounts:
         - name: kaniko-secret
           mountPath: /kaniko/.docker
