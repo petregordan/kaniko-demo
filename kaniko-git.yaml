@@ -4,15 +4,6 @@ kind: Pod
 metadata:
   name: kaniko
 spec:
-  initContainers:
-    - name: git-clone
-      image: alpine/git:latest
-      command: ["sh", "-c"]
-      args:
-        - git clone https://github.com/nanditechbytes/containerisation-kaniko-eks.git /workspace/containerisation-kaniko-eks
-      volumeMounts:
-        - name: kaniko-secret
-          mountPath: /kaniko/.docker
   containers:
   - name: kaniko
     image: gcr.io/kaniko-project/executor:debug
